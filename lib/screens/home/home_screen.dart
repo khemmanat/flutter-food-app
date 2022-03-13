@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfoodappbase/constants/constants.dart';
 import 'package:flutterfoodappbase/mock/mockData.dart';
+import 'package:flutterfoodappbase/screens/home/components/components.dart';
+import 'package:flutterfoodappbase/screens/home/components/section_title.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,68 +35,62 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         // all widgets here need to use with slivers
-        SliverToBoxAdapter(child: ImageCarousel())
+        const SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+            sliver: SliverToBoxAdapter(child: ImageCarousel())),
+        SliverPadding(
+          padding: const EdgeInsets.all(defaultPadding),
+          sliver: SliverToBoxAdapter(
+            child: SectionTitle(
+              title: "Featured Partners",
+              press: () {},
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+            child: Row(
+          children: [
+            SizedBox(
+                width: 200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AspectRatio(
+                        aspectRatio: 1.25,
+                        child: Image.asset("assets/images/medium_1.png")),
+                    Text(demoMediumCardData[0]['name'],
+                        style: Theme.of(context).textTheme.headline6),
+                    Text(demoMediumCardData[0]["location"],
+                        style: const TextStyle(color: kBodyTextColor)),
+                    DefaultTextStyle(
+                      style: const TextStyle(color: Colors.black, fontSize: 12),
+                      child: Row(
+                        children: [
+                          Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: defaultPadding / 2,
+                                  vertical: defaultPadding / 8),
+                              decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6)),
+                                  color: kActiveColor),
+                              child: const Text("4.6",
+                                  style: TextStyle(color: Colors.white))),
+                          Spacer(),
+                          Text("25 mins"),
+                          Spacer(),
+                          CircleAvatar(
+                              radius: 2, backgroundColor: Color(0xFF868686)),
+                          Spacer(),
+                          Text("Free Delivery")
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+          ],
+        ))
       ],
     ));
-  }
-}
-
-class ImageCarousel extends StatefulWidget {
-  const ImageCarousel({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<ImageCarousel> createState() => _ImageCarouselState();
-}
-
-class _ImageCarouselState extends State<ImageCarousel> {
-  int _currentPage = 0;
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-        aspectRatio: 1.81,
-        child: Stack(alignment: Alignment.bottomRight, children: [
-          PageView.builder(
-              itemCount: demoBigImages.length,
-              onPageChanged: (value) {
-                setState(() {
-                  _currentPage = value;
-                });
-              },
-              itemBuilder: (context, index) =>
-                  Image.asset(demoBigImages[index])),
-          Positioned(
-              bottom: defaultPadding,
-              right: defaultPadding,
-              child: Row(
-                children: List.generate(
-                    demoBigImages.length,
-                    (index) => Padding(
-                          padding:
-                              const EdgeInsets.only(left: defaultPadding / 4),
-                          child: IndicatorDot(isActive: index == _currentPage),
-                        )),
-              ))
-        ]));
-  }
-}
-
-class IndicatorDot extends StatelessWidget {
-  const IndicatorDot({
-    Key? key,
-    required this.isActive,
-  }) : super(key: key);
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 8,
-      height: 4,
-      decoration: BoxDecoration(
-          color: isActive ? Colors.white : Colors.white38,
-          borderRadius: const BorderRadius.all(Radius.circular(12))),
-    );
   }
 }
